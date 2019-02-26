@@ -3,7 +3,6 @@ import pygame
 pygame.init()
 
 
-
 # ========================================================================================================================
 
 import sqlite3
@@ -38,6 +37,7 @@ font = pygame.font.Font("freesansbold.ttf", 50)
 StartColour = (163, 218, 246)
 StartColourD = (132, 205, 242)
 backGC = (217, 240, 252)
+green = (0,255,0)
 
 big = pygame.font.Font("freesansbold.ttf", 50)
 small = pygame.font.Font("freesansbold.ttf", 30)
@@ -200,16 +200,57 @@ def profile(number):
 # =========================================================================================================================
 
 # =========================================================================================================================
+
+"""
 def drawWindow():
     display_height = 800
-    display_width = 1600
+    display_width = 900
     gameDisplay = pygame.display.set_mode((display_width,display_height))
     pygame.display.set_caption('Game')
     pygame.display.update()
 
-class Character():
+class Character(pygame.sprite.Sprite):
     def __init__(self):
-        pygame.draw.rect
+        super().__init__()
+
+        width = 40
+        height = 60
+        self.image = pygame.Surface 
+
+
+
+"""
+
+
+
+
+
+
+
+class Platform(pygame.sprite.Sprite):
+    def __init__(self, x, y, width, height, colour):
+
+        super().__init__()
+
+        self.image = pygame.Surface([width,height])
+        self.image.fill(colour)
+
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+
+        pygame.display.update()
+
+List_Of_Sprites = pygame.sprite.Group()
+
+platform_list = pygame.sprite.Group() # creates list of platforms that can be added to below
+                                      # Platform(posx, posy, width, height)
+
+plat = Platform(10, 700, 700, 100, green)
+platform_list.add(plat)
+List_Of_Sprites.add(plat)
+
+#plat = Platform()
 
 
 
@@ -220,16 +261,6 @@ class Character():
 
 
 """
-class Platform():
-    def __init__(self):
-
-
-
-
-
-
-
-
 
 class Dangers():
     def __init__(self):
@@ -239,6 +270,12 @@ class Dangers():
 
 
 def GameLoop():
+    display_height = 800
+    display_width = 900
+    gameDisplay = pygame.display.set_mode((display_width, display_height))
+    pygame.display.set_caption('Game')
+    pygame.display.update()
+
     run = True
     while run == True:
 
@@ -253,10 +290,14 @@ def GameLoop():
             pygame.quit()
             quit()
 
+        List_Of_Sprites.update()
+        List_Of_Sprites.draw(gameDisplay)
+        pygame.display.update()
+
 
 
 #Menu()
-drawWindow()
+#drawWindow()
 GameLoop()
 #=====================================================================================================================
 """Notes
