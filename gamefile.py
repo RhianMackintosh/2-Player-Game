@@ -22,13 +22,14 @@ db = sqlite3.connect("users.db")
 cursor = db.cursor()
 
 # drop the table to remake it
-cursor.execute('''DROP TABLE users''')
+"""cursor.execute('''DROP TABLE users''')
 
     #create table
 cursor.execute('''CREATE TABLE users (number INT, username STRING, password STRING, security STRING,name STRING, surname STRING,G1HS INT,G2HS INT,G3HS INT)''')
 
 cursor.execute('''INSERT INTO users (number,username,password,security,name,surname,G1HS,G2HS,G3HS) VALUES (1,"rhianmack","1234","Storkey","Rhian","Mackintosh",0,0,0)''')
-db.commit()
+cursor.execute('''INSERT INTO users (number,username,password,security,name,surname,G1HS,G2HS,G3HS) VALUES (2,"yasminS","2342","Sunthankar","Yasmin","Sunthankar",0,0,0)''')
+db.commit()"""
 # ========================================================================================================================
 # pygame variables
 ScreenWidth = 800
@@ -67,8 +68,6 @@ def LogIn():
     while c == False:
         a = False
         while a == False:
-            # User = input("Username: ")
-            # wPass = input("Password: ")
 
             cursor.execute('''SELECT * FROM users''')
             for row in cursor:
@@ -94,6 +93,7 @@ def passcheck(User, wPass, number):
         for row in cursor:
             if wPass == str(row[0]):
                 b = True
+                c = True
                 break
             else:
                 print("Incorrect password, please try again (error 1)")
@@ -111,7 +111,6 @@ def SignUp():
     name, surname, Nuser, Npass, confirm, Nsecurity = SignUpUI(retry)
     print(name, surname, Nuser, Npass, confirm, Nsecurity)
     # SignUpUI()
-
     # checking they entered the correct password
     d = False
     while d == False:
@@ -153,6 +152,7 @@ def Menu():
 
 
 
+
 # =========================================================================================================================
 def Menu2(number):
     menu = input("What would you like to do:\n\
@@ -172,11 +172,6 @@ def Menu2(number):
             gamesMenu(number)
         else:
             menu = input("Please enter '1' or '2': ")
-
-
-# =========================================================================================================================
-def gamesMenu(number):
-    print("Game Menu")
 
 
 
@@ -200,15 +195,15 @@ def profile(number):
         print("Game 3: " + str(G3HS))
 
         drawWindow()
-
+        GameLoop()
 
 # =========================================================================================================================
 
 # =========================================================================================================================
 def drawWindow():
-    display_height = 1000
-    display_width = 2000
-    gameDisplay = pygame.display.set_mode((display_height,display_width))
+    display_height = 800
+    display_width = 1600
+    gameDisplay = pygame.display.set_mode((display_width,display_height))
     pygame.display.set_caption('Game')
     pygame.display.update()
 
@@ -256,10 +251,13 @@ def GameLoop():
         if keys[pygame.K_ESCAPE]:
             run = False
             pygame.quit()
+            quit()
 
 
-#GameLoop()
-Menu()
+
+#Menu()
+drawWindow()
+GameLoop()
 #=====================================================================================================================
 """Notes
 
