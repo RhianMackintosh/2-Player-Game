@@ -17,30 +17,37 @@ from Sub_UI_SignUp import SignUpUI
 pygame.init()
 # ========================================================================================================================
 # creating the database to add things into
+
 db = sqlite3.connect("users.db")
 cursor = db.cursor()
 
 # drop the table to remake it
-"""cursor.execute('''DROP TABLE users''')
+cursor.execute('''DROP TABLE users''')
 
     #create table
 cursor.execute('''CREATE TABLE users (number INT, username STRING, password STRING, security STRING,name STRING, surname STRING,G1HS INT,G2HS INT,G3HS INT)''')
 
 cursor.execute('''INSERT INTO users (number,username,password,security,name,surname,G1HS,G2HS,G3HS) VALUES (1,"rhianmack","1234","Storkey","Rhian","Mackintosh",0,0,0)''')
 cursor.execute('''INSERT INTO users (number,username,password,security,name,surname,G1HS,G2HS,G3HS) VALUES (2,"yasminS","2342","Sunthankar","Yasmin","Sunthankar",0,0,0)''')
-db.commit()"""
+db.commit()
+
+
 # ========================================================================================================================
-# pygame variables
+# pygame variables for log in menu
 ScreenWidth = 800
 ScreenHeight = 800
 font = pygame.font.Font("freesansbold.ttf", 50)
+big = pygame.font.Font("freesansbold.ttf", 50)
+small = pygame.font.Font("freesansbold.ttf", 30)
+
+#Colours
 StartColour = (163, 218, 246)
 StartColourD = (132, 205, 242)
 backGC = (217, 240, 252)
 green = (0,255,0)
-
-big = pygame.font.Font("freesansbold.ttf", 50)
-small = pygame.font.Font("freesansbold.ttf", 30)
+red = (255,0,0)
+blue = (0,0,255)
+black = (0,0,0)
 
 LogIn = "Log In"
 SignIn = "Sign In"
@@ -139,6 +146,7 @@ def SignUp():
 
 
 # =========================================================================================================================
+
 def Menu():
     option = MainMenuUI()
 
@@ -194,35 +202,48 @@ def profile(number):
         print("Rock Paper scissors wins: " + str(G2HS))
         print("Game 3: " + str(G3HS))
 
-        drawWindow()
+
         GameLoop()
 
 # =========================================================================================================================
-
+# ACTUAL GAME CODE
 # =========================================================================================================================
 
-"""
-def drawWindow():
-    display_height = 800
-    display_width = 900
-    gameDisplay = pygame.display.set_mode((display_width,display_height))
-    pygame.display.set_caption('Game')
-    pygame.display.update()
 
 class Character(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, x, y, width, height, colour):
+
         super().__init__()
 
-        width = 40
-        height = 60
-        self.image = pygame.Surface 
+        self.image = pygame.Surface([width,height])
+        self.image.fill(colour)
+
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+
+        self.change_x = 0
+        self.change_y = 0
+
+   # def Update(self):
+    #    self.rect.x += self.change_x
 
 
+    def GoLeft(self):
+        self.change_x = -3
+        self.Update()
+    def GoRight(self):
+        self.change_x = 3
+        self.Update()
+    #def CalculateGravity(self):
+        #if change_y = 0:
 
-"""
-
-
-
+    def Update(self):
+        self.rect.x += self.change_x
+        if self.rect.x <= 0:
+            self.rect.x = 0
+        elif self.rect.x >= 850:
+            self.rect.x = 850
 
 
 
@@ -241,19 +262,24 @@ class Platform(pygame.sprite.Sprite):
 
         pygame.display.update()
 
+
+
+
 List_Of_Sprites = pygame.sprite.Group()
 
 platform_list = pygame.sprite.Group() # creates list of platforms that can be added to below
                                       # Platform(posx, posy, width, height)
 
-plat = Platform(10, 700, 700, 100, green)
+plat = Platform(0, 700, 900, 100, green)
 platform_list.add(plat)
 List_Of_Sprites.add(plat)
 
 #plat = Platform()
 
 
-
+player1 = Character(50,650,50,50,red)
+player2 = Character(150,650,50,50,blue)
+List_Of_Sprites.add(player1,player2)
 
 
 
@@ -269,6 +295,7 @@ class Dangers():
 """
 
 
+
 def GameLoop():
     display_height = 800
     display_width = 900
@@ -276,11 +303,14 @@ def GameLoop():
     pygame.display.set_caption('Game')
     pygame.display.update()
 
+
+
+
     run = True
     while run == True:
 
-        for event in pygame.event.get():                                         #gets a list of all of the events in pygame, loops through all events
-            if event.type == pygame.QUIT:                                        #If the red cross if pushed it quits the program
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 run = False
 
         keys = pygame.key.get_pressed()
@@ -290,6 +320,17 @@ def GameLoop():
             pygame.quit()
             quit()
 
+        if keys[pygame.K_LEFT]:
+            player1.GoLeft()
+        if keys[pygame.K_RIGHT]:
+            player1.GoRight()
+
+        if keys[pygame.K_a]:
+            player2.GoLeft()
+        if keys[pygame.K_d]:
+            player2.GoRight()
+
+        gameDisplay.fill(black)
         List_Of_Sprites.update()
         List_Of_Sprites.draw(gameDisplay)
         pygame.display.update()
@@ -297,9 +338,9 @@ def GameLoop():
 
 
 #Menu()
-#drawWindow()
+
 GameLoop()
-#=====================================================================================================================
+#=======================================================================================================================
 """Notes
 
 
