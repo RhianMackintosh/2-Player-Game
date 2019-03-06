@@ -228,21 +228,19 @@ class Character(pygame.sprite.Sprite):
         self.gravity = 0.1
         self.velocity = 2
         self.mass = 2
-        self.speed = 2
+        self.speed = 15
         self.isjump = 0
+        self.jumpCount = 10
 
 
 
     def GoLeft(self):
-        self.change_x = -3
-        self.change_y = 0
+        self.change_x = -(self.speed)
         self.Update()
+
     def GoRight(self):
-        self.change_x = 3
-        self.change_y = 0
+        self.change_x = self.speed
         self.Update()
-    #def CalculateGravity(self):
-        #if change_y = 0:
 
     def Jump(self):
         self.isjump = 1
@@ -254,16 +252,6 @@ class Character(pygame.sprite.Sprite):
 
 
     def Update(self):
-        if self.isjump:
-            F = (self.mass * self.velocity)
-
-
-            self.rect.y -= F
-            self.velocity -= 1
-            if self.rect.y == 650:
-                self.rect.y = 650
-                self.isjump = 0
-                self.velocity = 8
 
         self.rect.x += self.change_x
         if self.rect.x <= 0:
@@ -277,7 +265,7 @@ class Character(pygame.sprite.Sprite):
         elif self.rect.y >= 850:
             self.rect.y = 850
 
-
+# =========================================================================================================================
 
 
 class Platform(pygame.sprite.Sprite):
@@ -295,15 +283,15 @@ class Platform(pygame.sprite.Sprite):
         pygame.display.update()
 
 
-
-
+# =========================================================================================================================
+#Making character and platform lists and added in some
 List_Of_Sprites = pygame.sprite.Group()
 
 platform_list = pygame.sprite.Group() # creates list of platforms that can be added to below
                                       # Platform(posx, posy, width, height)
 
 plat = Platform(0, 700, 900, 100, green)
-plat2 = Platform(600,500,200,50,green)
+plat2 = Platform(600, 500, 200, 50, green)
 platform_list.add(plat,plat2)
 List_Of_Sprites.add(plat,plat2)
 
@@ -318,20 +306,12 @@ List_Of_Sprites.add(player1,player2)
 
 
 
-
-"""
-
-class Dangers():
-    def __init__(self):
-
-
-"""
-
-
+# =========================================================================================================================
 
 def GameLoop():
     display_height = 800
     display_width = 900
+    clock = pygame.time.Clock()
     gameDisplay = pygame.display.set_mode((display_width, display_height))
     pygame.display.set_caption('Game')
     pygame.display.update()
@@ -341,6 +321,7 @@ def GameLoop():
 
     run = True
     while run == True:
+        clock.tick(30)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -363,12 +344,39 @@ def GameLoop():
         if keys[pygame.K_d]:
             player2.GoRight()
 
-        if keys[pygame.K_UP]:
-            player1.Jump()
-
+        if not(player1.isjump):
+            if keys[pygame.K_UP]:
+                player1.isjump = True
         else:
-            player1.Stop()
-            player2.Stop()
+            if player1.jumpCount >= -10:
+                neg = 1
+                if player1.jumpCount < 0:
+                    neg = -1
+                player1.rect.y -= (player1.jumpCount ** 2) * 0.5 * neg
+                player1.jumpCount -= 1
+            else:
+                player1.isjump = False
+                player1.jumpCount = 10
+                player1.rect.y += 5
+
+        if not(player2.isjump):
+            if keys[pygame.K_w]:
+                player2.isjump = True
+        else:
+            if player2.jumpCount >= -10:
+                neg = 1
+                if player2.jumpCount < 0:
+                    neg = -1
+                player2.rect.y -= (player2.jumpCount ** 2) * 0.5 * neg
+                player2.jumpCount -= 1
+            else:
+                player2.isjump = False
+                player2.jumpCount = 10
+                player2.rect.y += 5
+
+        #else:
+            #player1.Stop()
+            #player2.Stop()
         gameDisplay.fill(black)
         List_Of_Sprites.update()
         List_Of_Sprites.draw(gameDisplay)
