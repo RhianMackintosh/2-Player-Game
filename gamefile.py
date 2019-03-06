@@ -225,25 +225,58 @@ class Character(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
 
-   # def Update(self):
-    #    self.rect.x += self.change_x
+        self.gravity = 0.1
+        self.velocity = 2
+        self.mass = 2
+        self.speed = 2
+        self.isjump = 0
+
 
 
     def GoLeft(self):
         self.change_x = -3
+        self.change_y = 0
         self.Update()
     def GoRight(self):
         self.change_x = 3
+        self.change_y = 0
         self.Update()
     #def CalculateGravity(self):
         #if change_y = 0:
 
+    def Jump(self):
+        self.isjump = 1
+        self.Update()
+
+    def Stop(self):
+        self.change_y = 0
+        self.change_x = 0
+
+
     def Update(self):
+        if self.isjump:
+            F = (self.mass * self.velocity)
+
+
+            self.rect.y -= F
+            self.velocity -= 1
+
+            if self.rect.y == 650:
+                self.rect.y = 650
+                self.isjump = 0
+                self.velocity = 8
+
         self.rect.x += self.change_x
         if self.rect.x <= 0:
             self.rect.x = 0
         elif self.rect.x >= 850:
             self.rect.x = 850
+
+        self.rect.y += self.change_y
+        if self.rect.y <= 0:
+            self.rect.y = 0
+        elif self.rect.y >= 850:
+            self.rect.y = 850
 
 
 
@@ -330,6 +363,12 @@ def GameLoop():
         if keys[pygame.K_d]:
             player2.GoRight()
 
+        if keys[pygame.K_UP]:
+            player1.Jump()
+
+        else:
+            player1.Stop()
+            player2.Stop()
         gameDisplay.fill(black)
         List_Of_Sprites.update()
         List_Of_Sprites.draw(gameDisplay)
