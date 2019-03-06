@@ -260,7 +260,6 @@ class Character(pygame.sprite.Sprite):
 
             self.rect.y -= F
             self.velocity -= 1
-
             if self.rect.y == 650:
                 self.rect.y = 650
                 self.isjump = 0
@@ -304,8 +303,9 @@ platform_list = pygame.sprite.Group() # creates list of platforms that can be ad
                                       # Platform(posx, posy, width, height)
 
 plat = Platform(0, 700, 900, 100, green)
-platform_list.add(plat)
-List_Of_Sprites.add(plat)
+plat2 = Platform(600,500,200,50,green)
+platform_list.add(plat,plat2)
+List_Of_Sprites.add(plat,plat2)
 
 #plat = Platform()
 
