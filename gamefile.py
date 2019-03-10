@@ -265,6 +265,12 @@ class Character(pygame.sprite.Sprite):
         elif self.rect.y >= 850:
             self.rect.y = 850
 
+
+
+        List_Of_Sprites.update()
+
+
+
 # =========================================================================================================================
 
 
@@ -291,14 +297,14 @@ platform_list = pygame.sprite.Group() # creates list of platforms that can be ad
                                       # Platform(posx, posy, width, height)
 
 plat = Platform(0, 700, 900, 100, green)
-plat2 = Platform(600, 500, 200, 50, green)
+plat2 = Platform(600, 520, 200, 50, green)
 platform_list.add(plat,plat2)
 List_Of_Sprites.add(plat,plat2)
 
 #plat = Platform()
 
 
-player1 = Character(50,650,50,50,red)
+player1 = Character(620,400,50,50,red)
 player2 = Character(150,650,50,50,blue)
 List_Of_Sprites.add(player1,player2)
 
@@ -307,6 +313,7 @@ List_Of_Sprites.add(player1,player2)
 
 
 # =========================================================================================================================
+
 
 def GameLoop():
     display_height = 800
@@ -344,16 +351,16 @@ def GameLoop():
         if keys[pygame.K_d]:
             player2.GoRight()
 
-        if not(player1.isjump):
+        if not(player1.isjump):                                                 #if they arent jumping, let them jump
             if keys[pygame.K_UP]:
                 player1.isjump = True
         else:
             if player1.jumpCount >= -10:
                 neg = 1
-                if player1.jumpCount < 0:
+                if player1.jumpCount < 0:                                       # when it gets to the top of the jump
                     neg = -1
-                player1.rect.y -= (player1.jumpCount ** 2) * 0.5 * neg
-                player1.jumpCount -= 1
+                player1.rect.y -= (player1.jumpCount ** 2) * 0.5 * neg          #jumpcount = 10 so moves 100 then 81 etc.
+                player1.jumpCount -= 1                                          #when it gets to the top jumpcount = 0
             else:
                 player1.isjump = False
                 player1.jumpCount = 10
@@ -374,6 +381,8 @@ def GameLoop():
                 player2.jumpCount = 10
                 player2.rect.y += 5
 
+
+
         #else:
             #player1.Stop()
             #player2.Stop()
@@ -389,7 +398,7 @@ def GameLoop():
 GameLoop()
 #=======================================================================================================================
 """Notes
-
-
+what if for gravity we did something like 'if the bottom co-ords of the character arent touching a platform the keep
+decreasing the y until it does hit it'
 
 """
