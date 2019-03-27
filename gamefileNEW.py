@@ -31,14 +31,24 @@ class Player(pygame.sprite.Sprite):
         self.Calculate_Gravity()
 
         self.rect.x += self.change_x
-        self.rect.y += self.change_y
+       # self.rect.y += self.change_y
+
 
         block_collision_list = pygame.sprite.spritecollide(self,self.level.platform_list,False)
-        for platform in block_collision_list:
+        for block in block_collision_list:
             if self.change_y > 0:
-                self.rect.bottom = platform.rect.top
+                self.rect.bottom = block.rect.left
             else:
-                self.rect.top = platform.rect.bottom
+                self.rect.top = block.rect.right
+
+        self.rect.y += self.change_y
+
+        block_collision_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
+        for block in block_collision_list:
+            if self.change_y > 0:
+                self.rect.bottom = block.rect.top
+            elif self.change_y < 0:
+                self.rect.top = block.rect.bottom
 
             self.change_y = 0
 
@@ -120,9 +130,10 @@ def GameLoop():
     gameDisplay = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption('Game')
     player1 = Player()
-
+    player2 = Player()
     Level_list = []
     Level_list.append(Level_01(player1))
+    Level_list.append(Level_01(player2))
 
 
     Current_level_no = 0
@@ -133,8 +144,11 @@ def GameLoop():
 
     player1.rect.x = 340
     player1.rect.y = 100
+    player2.rect.x = 200
+    player2.rect.y = 150
         #screen_height - player1.rect.height
     Sprite_list.add(player1)
+    Sprite_list.add(player2)
 
     done = False
 
@@ -152,17 +166,30 @@ def GameLoop():
                 if event.key == pygame.K_UP:
                     player1.Jump()
 
+                if event.key == pygame.K_a:
+                    player2.GoLeft()
+                if event.key == pygame.K_d:
+                    player2.GoRight()
+                if event.key == pygame.K_w:
+                    player2.Jump()
+
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT and player1.change_x < 0:
                     player1.Stop()
                 if event.key == pygame.K_RIGHT and player1.change_x > 0:
                     player1.Stop()
 
+                if event.key == pygame.K_a and player2.change_x < 0:
+                    player2.Stop()
+                if event.key == pygame.K_d and player2.change_x > 0:
+                    player2.Stop()
+
         Sprite_list.update()
 
         Current_level.Update()
 
         player1.Update()
+        player2.Update()
         if player1.rect.right > screen_width:
             player1.rect.right = screen_width
 
@@ -174,6 +201,7 @@ def GameLoop():
         pygame.display.update()
 
     pygame.quit()
+    quit()
 
 if __name__ == '__main__':
     GameLoop()
