@@ -15,21 +15,42 @@ Player2Colour = (109, 111, 206)
 screen_width = 900
 screen_height = 800
 
+Player1Right = [pygame.image.load('Goat-1.png'),pygame.image.load('Goat-2.png'),pygame.image.load('Goat-3.png')]
+Player2Right = [pygame.image.load('Cat-1.png'),pygame.image.load('Cat-2.png'),pygame.image.load('Cat-3.png')]
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self,colour):
         super().__init__()
 
-        player_width = 50
-        player_height = 50
+        player_width = 64
+        player_height = 64
         self.image = pygame.Surface([player_width,player_height])
-        self.image.fill(colour)
+        #self.image.fill(colour)
 
         self.rect = self.image.get_rect()
         self.change_x = 0
         self.change_y = 0
-
-
+        self.left = False
+        self.right = False
+        self.standing = False
+        self.walkCount = 0
         self.level = None
+
+    def draw(self,display):
+        if self.walkCount + 1 >=9:
+            self.walkCount = 0
+        if self.left == True:
+            display.blit(Player1Right[self.walkCount//3],(self.rect.x,self.rect.y))
+            self.walkCount += 1
+        elif self.left == True:
+            display.blit(Player1Right[self.walkCount//3],(self.rect.x,self.rect.y))
+            self.walkCount += 1
+        else:
+            display.blit(Player1Right[0],(self.rect.x,self.rect.y))
+
+
+
 
     def Update(self):
         self.Calculate_Gravity()
@@ -83,12 +104,22 @@ class Player(pygame.sprite.Sprite):
 
     def GoLeft(self):
         self.change_x = -6
+        self.left = True
+        self.right = False
+        self.standing = True
 
     def GoRight(self):
         self.change_x = 6
+        self.left = True
+        self.right = False
+        self.standing = True
 
     def Stop(self):
         self.change_x = 0
+        self.standing = True
+        self.right = False
+        self.left = False
+        self.walkCount = 0
 
 
 class Platform(pygame.sprite.Sprite):
@@ -201,13 +232,12 @@ def GameLoop():
 
         player1.Update()
         player2.Update()
-        if player1.rect.right > screen_width:
-            player1.rect.right = screen_width
 
         Current_level.draw(gameDisplay)
-        Sprite_list.draw(gameDisplay)
+        player1.draw(gameDisplay)
+        player2.draw(gameDisplay)
 
-        clock.tick(45)
+        clock.tick(30)
 
         pygame.display.update()
 
