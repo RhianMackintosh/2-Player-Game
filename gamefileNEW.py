@@ -30,8 +30,14 @@ class Player(pygame.sprite.Sprite):
     def Update(self):
         self.Calculate_Gravity()
 
-        self.rect.x += self.change_x
-       # self.rect.y += self.change_y
+        if self.rect.x + self.change_x <= 0:
+            self.rect.x = self.rect.x
+        elif self.rect.x + self.change_x >= screen_width -50:
+            self.rect.x = self.rect.x
+        else:
+            self.rect.x += self.change_x
+
+
 
 
         block_collision_list = pygame.sprite.spritecollide(self,self.level.platform_list,False)
@@ -141,6 +147,7 @@ def GameLoop():
 
     Sprite_list = pygame.sprite.Group()
     player1.level = Current_level
+    player2.level = Current_level
 
     player1.rect.x = 340
     player1.rect.y = 100
