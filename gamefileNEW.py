@@ -3,22 +3,26 @@ import pygame
 pygame.init()
 
 green = (0,255,0)
+PlatformColour = (141, 224, 155)
 red = (255,0,0)
 blue = (0,0,255)
+sky = (189, 234, 252)
 black = (0,0,0)
 white = (255,255,255)
+Player1Colour = (224, 141, 190)
+Player2Colour = (109, 111, 206)
 
 screen_width = 900
 screen_height = 800
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,colour):
         super().__init__()
 
         player_width = 50
         player_height = 50
         self.image = pygame.Surface([player_width,player_height])
-        self.image.fill(red)
+        self.image.fill(colour)
 
         self.rect = self.image.get_rect()
         self.change_x = 0
@@ -93,7 +97,7 @@ class Platform(pygame.sprite.Sprite):
 
         self.image = pygame.Surface([platform_width,platform_height])
 
-        self.image.fill(green)
+        self.image.fill(PlatformColour)
 
         self.rect = self.image.get_rect()
 
@@ -107,7 +111,7 @@ class Level(object):                                                        #wha
         self.platform_list.update()
 
     def draw(self, display):
-        display.fill(blue)
+        display.fill(sky)
         self.platform_list.draw(display)
 
 
@@ -135,8 +139,8 @@ def GameLoop():
     clock = pygame.time.Clock()
     gameDisplay = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption('Game')
-    player1 = Player()
-    player2 = Player()
+    player1 = Player(Player1Colour)
+    player2 = Player(Player2Colour)
     Level_list = []
     Level_list.append(Level_01(player1))
     Level_list.append(Level_01(player2))
