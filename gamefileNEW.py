@@ -15,16 +15,16 @@ Player2Colour = (109, 111, 206)
 screen_width = 900
 screen_height = 800
 
-Player1Right = [pygame.image.load('Goat-1.png'),pygame.image.load('Goat-2.png'),pygame.image.load('Goat-3.png')]
-Player2Right = [pygame.image.load('Cat-1.png'),pygame.image.load('Cat-2.png'),pygame.image.load('Cat-3.png')]
+GoatRight = [pygame.image.load('Goat-1.png'),pygame.image.load('Goat-2.png'),pygame.image.load('Goat-3.png')]
+CatRight = [pygame.image.load('Cat-1.png'),pygame.image.load('Cat-2.png'),pygame.image.load('Cat-3.png')]
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self,colour):
         super().__init__()
 
-        player_width = 64
-        player_height = 64
+        player_width = 30
+        player_height = 45
         self.image = pygame.Surface([player_width,player_height])
         #self.image.fill(colour)
 
@@ -37,17 +37,28 @@ class Player(pygame.sprite.Sprite):
         self.walkCount = 0
         self.level = None
 
-    def draw(self,display):
+    def draw(self,display,character):
+
         if self.walkCount + 1 >=9:
             self.walkCount = 0
-        if self.left == True:
-            display.blit(Player1Right[self.walkCount//3],(self.rect.x,self.rect.y))
-            self.walkCount += 1
-        elif self.left == True:
-            display.blit(Player1Right[self.walkCount//3],(self.rect.x,self.rect.y))
-            self.walkCount += 1
+        if character == 'Goat':
+            if self.left == True:
+                display.blit(GoatRight[self.walkCount//3],(self.rect.x,self.rect.y))
+                self.walkCount += 1
+            elif self.left == True:
+                display.blit(GoatRight[self.walkCount//3],(self.rect.x,self.rect.y))
+                self.walkCount += 1
+            else:
+                display.blit(GoatRight[0],(self.rect.x,self.rect.y))
         else:
-            display.blit(Player1Right[0],(self.rect.x,self.rect.y))
+            if self.left == True:
+                display.blit(CatRight[self.walkCount//3],(self.rect.x,self.rect.y))
+                self.walkCount += 1
+            elif self.left == True:
+                display.blit(CatRight[self.walkCount//3],(self.rect.x,self.rect.y))
+                self.walkCount += 1
+            else:
+                display.blit(CatRight[0],(self.rect.x,self.rect.y))
 
 
 
@@ -57,7 +68,7 @@ class Player(pygame.sprite.Sprite):
 
         if self.rect.x + self.change_x <= 0:
             self.rect.x = self.rect.x
-        elif self.rect.x + self.change_x >= screen_width -50:
+        elif self.rect.x + self.change_x >= screen_width - 30 :
             self.rect.x = self.rect.x
         else:
             self.rect.x += self.change_x
@@ -234,8 +245,8 @@ def GameLoop():
         player2.Update()
 
         Current_level.draw(gameDisplay)
-        player1.draw(gameDisplay)
-        player2.draw(gameDisplay)
+        player1.draw(gameDisplay, 'Goat')
+        player2.draw(gameDisplay, 'Cat')
 
         clock.tick(30)
 
