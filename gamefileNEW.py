@@ -42,7 +42,7 @@ class Player(pygame.sprite.Sprite):
         if self.walkCount + 1 >=9:
             self.walkCount = 0
         if character == 'Goat':
-            if self.left == True:
+            if self.right == True:
                 display.blit(GoatRight[self.walkCount//3],(self.rect.x,self.rect.y))
                 self.walkCount += 1
             elif self.left == True:
@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 display.blit(GoatRight[0],(self.rect.x,self.rect.y))
         else:
-            if self.left == True:
+            if self.right == True:
                 display.blit(CatRight[self.walkCount//3],(self.rect.x,self.rect.y))
                 self.walkCount += 1
             elif self.left == True:
@@ -75,31 +75,34 @@ class Player(pygame.sprite.Sprite):
 
 
 
-
-        block_collision_list = pygame.sprite.spritecollide(self,self.level.platform_list,False)
+        """block_collision_list = pygame.sprite.spritecollide(self,self.level.platform_list,False)
         for block in block_collision_list:
             if self.change_y > 0:
                 self.rect.bottom = block.rect.left
             else:
-                self.rect.top = block.rect.right
+                self.rect.top = block.rect.right"""
 
         self.rect.y += self.change_y
 
         block_collision_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_collision_list:
-            if self.change_y > 0:
-                self.rect.bottom = block.rect.top
-            elif self.change_y < 0:
-                self.rect.top = block.rect.bottom
+            if self.rect.left == block.rect.right or self.rect.right == block.rect.left:
+                self.Stop()
+            else:
+                if self.change_y > 0:
+                    self.rect.bottom = block.rect.top
+                elif self.change_y < 0:
+                    self.rect.top = block.rect.bottom
+                    self.Stop()
 
-            self.change_y = 0
+                self.change_y = 0
 
 
     def Calculate_Gravity(self):
         if self.change_y == 0:
             self.change_y = 1
         else:
-            self.change_y += 0.35
+            self.change_y += 0.465
 
         if self.rect.y >= screen_height - self.rect.height and self.change_y >= 0:
             self.change_y = 0
@@ -117,16 +120,17 @@ class Player(pygame.sprite.Sprite):
         self.change_x = -6
         self.left = True
         self.right = False
-        self.standing = True
+        self.standing = False
 
     def GoRight(self):
         self.change_x = 6
         self.left = True
         self.right = False
-        self.standing = True
+        self.standing = False
 
     def Stop(self):
         self.change_x = 0
+        self.change_y = 0
         self.standing = True
         self.right = False
         self.left = False
@@ -144,7 +148,7 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
 
-class Level(object):                                                        #what does this do?
+class Level(object):                                                    
     def __init__(self,player):
         self.platform_list = pygame.sprite.Group()
         self.player = player
@@ -163,7 +167,8 @@ class Level_01(Level):
         level = [[900, 20, 0, 780],
                  [210, 70, 200, 400],
                  [210, 70, 600, 300],
-                 [100, 10, 300, 700]
+                 [100, 10, 300, 700],
+                 [50, 300, 700, 500]
                  ]
 
         for platform in level:
@@ -212,6 +217,9 @@ def GameLoop():
                 done = True
 
             if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_ESCAPE:
+                    done = True
                 if event.key == pygame.K_LEFT:
                     player1.GoLeft()
                 if event.key == pygame.K_RIGHT:
