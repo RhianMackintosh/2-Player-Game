@@ -1,2 +1,2 @@
 # 2-Player-Game
-2 player game using pygame
+Little collaboration project exploring a bit of pygame to make a simple 2 player game.
